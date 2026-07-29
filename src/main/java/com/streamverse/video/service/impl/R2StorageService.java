@@ -21,6 +21,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignReques
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.UUID;
 
@@ -52,6 +53,18 @@ public class R2StorageService implements StorageService {
         );
 
         return key;
+    }
+
+    @Override
+    public void uploadFile(String key, Path filePath, String contentType) {
+
+        PutObjectRequest request = PutObjectRequest.builder()
+                .bucket(properties.getBucketName())
+                .key(key)
+                .contentType(contentType)
+                .build();
+
+        s3Client.putObject(request, RequestBody.fromFile(filePath));
     }
 
     @Override

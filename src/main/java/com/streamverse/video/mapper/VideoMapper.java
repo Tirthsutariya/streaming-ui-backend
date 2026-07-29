@@ -14,6 +14,8 @@ public class VideoMapper {
                 .name(video.getName())
                 .thumbnail(video.getThumbnail())
                 .videoLink(video.getVideoLink())
+                .hlsUrl(video.getHlsUrl())
+                .status(video.getStatus())
                 .createdAt(video.getCreatedAt())
                 .updatedAt(video.getUpdatedAt())
                 .isDeleted(video.getIsDeleted())

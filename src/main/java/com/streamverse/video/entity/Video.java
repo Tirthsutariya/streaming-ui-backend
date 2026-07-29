@@ -1,7 +1,10 @@
 package com.streamverse.video.entity;
 
+import com.streamverse.video.constant.VideoStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -42,4 +45,12 @@ public class Video extends BaseEntity {
     private String videoLink;
 
     private Integer likes;
+
+    // Master HLS playlist URL (master.m3u8), populated after transcoding.
+    @Column(name = "hls_url", length = 1000)
+    private String hlsUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 20)
+    private VideoStatus status;
 }

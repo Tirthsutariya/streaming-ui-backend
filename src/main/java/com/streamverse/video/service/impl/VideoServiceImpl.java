@@ -3,6 +3,7 @@ package com.streamverse.video.service.impl;
 import com.streamverse.video.dto.request.UploadUrlRequest;
 import com.streamverse.video.dto.request.VideoMetadataRequest;
 import com.streamverse.video.dto.request.VideoUpdateRequest;
+import com.streamverse.video.constant.VideoStatus;
 import com.streamverse.video.dto.response.UploadUrlResponse;
 import com.streamverse.video.dto.response.VideoResponse;
 import com.streamverse.video.entity.Video;
@@ -11,6 +12,7 @@ import com.streamverse.video.exception.ResourceNotFoundException;
 import com.streamverse.video.mapper.VideoMapper;
 import com.streamverse.video.repository.VideoRepository;
 import com.streamverse.video.service.StorageService;
+import com.streamverse.video.service.TranscodingService;
 import com.streamverse.video.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ public class VideoServiceImpl implements VideoService {
     private final VideoRepository videoRepository;
     private final VideoMapper videoMapper;
     private final StorageService storageService;
+    private final TranscodingService transcodingService;
 
     @Override
     public UploadUrlResponse createUploadUrl(final UploadUrlRequest request) {
@@ -52,9 +55,16 @@ public class VideoServiceImpl implements VideoService {
                 .name(request.getName())
                 .videoLink(storageService.getPublicUrl(request.getVideoKey()))
                 .thumbnail(storageService.getPublicUrl(request.getThumbnailKey()))
+                .status(VideoStatus.PROCESSING)
                 .build();
 
-        return videoMapper.toResponse(videoRepository.save(video));
+        final Video saved = videoRepository.save(video);
+
+        // Fire-and-forget: generate the HLS ladder in the background. The row
+        // starts as PROCESSING and flips to READY (or FAILED) when done.
+        transcodingService.transcodeToHls(saved.getId(), request.getVideoKey());
+
+        return videoMapper.toResponse(saved);
     }
 
     @Override

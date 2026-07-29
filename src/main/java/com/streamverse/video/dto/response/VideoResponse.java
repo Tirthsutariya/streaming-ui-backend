@@ -1,5 +1,6 @@
 package com.streamverse.video.dto.response;
 
+import com.streamverse.video.constant.VideoStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,8 @@ public class VideoResponse {
     private String name;
     private String thumbnail;
     private String videoLink;
+    private String hlsUrl;
+    private VideoStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Boolean isDeleted;

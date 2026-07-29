@@ -4,10 +4,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 
 public interface StorageService {
 
     String upload(MultipartFile file) throws IOException;
+
+    /** Upload a local file (used by the transcoder to push HLS output to R2). */
+    void uploadFile(String key, Path filePath, String contentType);
 
     InputStream download(String key);
 
