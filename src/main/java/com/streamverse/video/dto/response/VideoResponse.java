@@ -19,6 +19,7 @@ public class VideoResponse {
     private String thumbnail;
     private String videoLink;
     private String hlsUrl;
+    private Integer likes;
     private VideoStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

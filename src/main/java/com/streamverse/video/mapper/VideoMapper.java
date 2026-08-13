@@ -15,6 +15,7 @@ public class VideoMapper {
                 .thumbnail(video.getThumbnail())
                 .videoLink(video.getVideoLink())
                 .hlsUrl(video.getHlsUrl())
+                .likes(video.getLikes())
                 .status(video.getStatus())
                 .createdAt(video.getCreatedAt())
                 .updatedAt(video.getUpdatedAt())
